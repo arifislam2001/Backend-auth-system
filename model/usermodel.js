@@ -43,6 +43,12 @@ const userSchema = new Schema(
       enum: ["admin", "employee", "user"],
       default: "user"
     },
+    status:{
+      type : Boolean,
+      defult : function(){
+       return this.role === "admin" ? true : false
+      }
+    },
     isEmailVerified: {
       type: Boolean,
       default: false,

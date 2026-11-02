@@ -8,16 +8,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET
 });
 
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, './uploads');
-//   },
-//   filename: function (req, file, cb) {
-//     const uniqueSuffix = 'Img-' + Date.now() + '-' + file.originalname;
-//     cb(null,   uniqueSuffix);
-//   },
-// });
-
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {

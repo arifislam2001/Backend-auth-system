@@ -93,6 +93,7 @@ const registrationController = async (req, res) => {
       phone,
       gender,
       dob,
+      status: role === "admin" ? true : false,
       role,
       emailVerificationToken: hashToken(plainVerificationToken),
       emailVerificationTokenExpires: new Date(Date.now() + VERIFICATION_EXPIRE_MS),
@@ -148,6 +149,13 @@ const loginController = async (req, res) => {
       return res.status(403).json({
         success: false,
         message: "Please verify your email before logging in",
+      });
+    }
+   
+    if (!user.status) {
+      return res.status(403).json({
+        success: false,
+        message: "Please contract your admin to approved your account",
       });
     }
 

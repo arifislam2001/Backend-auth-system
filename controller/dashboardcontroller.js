@@ -11,6 +11,7 @@ function formatUser(user){
     gender: user.gender,
     dob: user.dob,
     role: user.role,
+    status: user.status,  
     isEmailVerified: user.isEmailVerified,
     createdAt: user.createdAt,
     updatedAt: user.updatedAt
@@ -38,23 +39,97 @@ const getallusercontroller = async (req, res) => {
     res.send(error)
   }
 };
-const getuserdeleate = async (req, res) => {
-  try {
-    const { id } = req.params;
 
-    if (id === req.user.id) {
-      return res.status(400).json({ success: false, message: "You can't delete yourself" });
-    }
+const getsingleusercontroller = async ( req , res)=>{
 
-    const deleted = await usermodel.findByIdAndDelete(id);
-    if (!deleted) {
-      return res.status(404).json({ success: false, message: "User not found" });
-    }
+  const userId = req.params.id
+   try {
+    const user = await usermodel.findOne({
+      _id : userId
+    })
+    res.status(200).json({
+      success : true,
+      message : "User get Successfully",
+      data : user
 
-    return res.status(200).json({ success: true, message: "Deleted successfully" });
+    })
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ success: false, message: "Could not delete" });
+    res.status(400).json({
+      success : false,
+      message : error.message,
+      userId : userId
+    })
+  }
+}
+
+const approvedUsercontroller = async (req , res)=>{
+
+try {
+    let updateUser = await usermodel.findByIdAndUpdate(
+      req.params.id,
+      { status : true },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+    res.status(200).json({
+      success: true,
+      message: "user approved Successfully.",
+      data: updateUser,
+    });
+    
+  } catch (error) {
+    return res.status(500).json({
+     success: false, 
+     message: error.message
+     });
+  }
+  }
+
+const deactiveUsercontroller = async (req, res)=>{
+ try {
+   let updateUser = await usermodel.findByIdAndUpdate(
+      req.params.id,
+      { status : false },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+    res.status(200).json({
+      success: true,
+      message: "user deactive  Successfully.",
+      data: updateUser,
+    });
+    
+  } catch (error) {
+  
+  return res.status(500).json({
+     success: false, 
+     message: error.message
+     });
+  }
+}
+
+const deleteUsercontroller = async (req, res) => {
+try {
+   let deleteUser = await usermodel.findByIdAndDelete(
+      req.params.id,
+    );
+    res.status(200).json({
+      success: true,
+      message: "user delete  Successfully.",
+      data: deleteUser,
+    });
+    
+  } catch (error) {
+  
+
+    return res.status(500).json({
+     success: false, 
+     message: error.message
+     });
   }
 };
 
@@ -79,4 +154,13 @@ const getuserupdate = async (req, res) => {
   }
 };
 
-module.exports = { getallusercontroller , getuserdeleate , getuserupdate }
+
+
+module.exports = {
+    getallusercontroller,
+    deleteUsercontroller ,
+    getuserupdate , 
+    getsingleusercontroller , 
+    approvedUsercontroller,
+    deactiveUsercontroller
+  }

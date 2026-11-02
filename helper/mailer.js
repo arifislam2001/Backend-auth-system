@@ -32,12 +32,7 @@ const sendVerificationEmail = async (email,username, plainToken) => {
   await sendEmail({
     to: email,
     subject: "Verify your email",
-    // html: `
-    //   <p>Thanks for registering. Click the link below to verify your email (valid for 24 hours):</p>
-    //   <p><a href="${verifyUrl}">${verifyUrl}</a></p>
-    //   <a ></a>
-    //   <p>If you did not create an account, ignore this email.</p>
-    // `,
+   
     html: `
       <table role="presentation" width="100%" cellpadding="0"
          cellspacing="0" border="0"
