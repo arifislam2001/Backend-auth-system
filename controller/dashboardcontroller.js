@@ -21,22 +21,43 @@ function formatUser(user){
 
 const getallusercontroller = async (req, res) => {
   try {
-    const loggdinuserId = req.user.id
-    const loggedinuser = await usermodel.findById(loggdinuserId)
-    const user = await usermodel.find({
-      _id : {$ne : loggdinuserId}
-    })
+    const loggdinuserId = req.user.id;
+    const loggdinuser = await usermodel.findById(loggdinuserId);
+    const search = req.query.search ? req.query.search.trim() : "";
+
+    const filter = {
+      _id: { $ne: loggdinuserId },
+    };
+
+    if (search) {
+      const searchRegex = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      filter.$or = [
+        { username: { $regex: searchRegex, $options: "i" } },
+        { email: { $regex: searchRegex, $options: "i" } },
+        { role: { $regex: searchRegex, $options: "i" } },
+      ];
+    }
+
+    const user = await usermodel.find(filter);
+
+    if (search && user.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "can't find user",
+      });
+    }
+
     res.status(200).json({
-      success : false,
-      message : "User get Successfully",
-      data : {
-       user: user.map(formatUser),
-       length : user.length
+      success: true,
+      message: "User get Successfully",
+      data: {
+        user: user.map(formatUser),
+        length: user.length,
       },
-      loggdinuser: loggedinuser
-    })
+      loggdinuser,
+    });
   } catch (error) {
-    res.send(error)
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
