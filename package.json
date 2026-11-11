@@ -2,9 +2,10 @@
   "name": "node.js.connet",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
+"scripts": {
+  "start": "node index.js",
+  "dev": "nodemon index.js"
+},
   "dependencies": {
     "bcrypt": "^6.0.0",
     "cloudinary": "^1.41.3",

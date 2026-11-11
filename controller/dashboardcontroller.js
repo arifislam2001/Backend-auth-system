@@ -23,6 +23,7 @@ const getallusercontroller = async (req, res) => {
   try {
     const loggdinuserId = req.user.id;
     const loggdinuser = await usermodel.findById(loggdinuserId);
+    
     const search = req.query.search ? req.query.search.trim() : "";
 
     const filter = {

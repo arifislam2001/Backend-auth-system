@@ -178,20 +178,35 @@ const sendVerificationEmail = async (email,username, plainToken) => {
 };
 
 const sendPasswordResetEmail = async (email, plainToken) => {
-  const frontendResetUrl = `${getAppBaseUrl()}/reset-password?token=${plainToken}`;
-  const apiResetUrl = `${getAppBaseUrl()}/api/v1/auth/reset-password/${plainToken}`;
+  const resetUrl = `${getAppBaseUrl()}/reset-password/${plainToken}`;
+
   await sendEmail({
     to: email,
     subject: "Reset your password",
     html: `
-      <p>You requested a password reset (valid for 1 hour).</p>
-      <p><a href="${frontendResetUrl}">Reset password in the app</a></p>
-      <p>API: POST <code>${apiResetUrl}</code> with body <code>{ "password": "yourNewPassword" }</code></p>
-      <p>If you did not request this, ignore this email.</p>
+      <div style="font-family:Arial,sans-serif;max-width:520px;margin:auto;padding:20px;">
+        <h2 style="color:#111827;">Reset your password</h2>
+        <p style="color:#4b5563;line-height:24px;">
+          You requested a password reset. This link is valid for 1 hour.
+        </p>
+        <p style="margin:24px 0;">
+          <a href="${resetUrl}"
+             style="background:#2563eb;color:#ffffff;padding:12px 24px;
+                    text-decoration:none;border-radius:6px;font-weight:bold;">
+            Reset Password
+          </a>
+        </p>
+        <p style="color:#6b7280;font-size:14px;">
+          If the button doesn't work, copy this link into your browser:<br>
+          <a href="${resetUrl}" style="color:#2563eb;word-break:break-all;">${resetUrl}</a>
+        </p>
+        <p style="color:#6b7280;font-size:14px;">
+          If you did not request this, you can safely ignore this email.
+        </p>
+      </div>
     `,
   });
 };
-
 module.exports = {
   sendVerificationEmail,
   sendPasswordResetEmail,
