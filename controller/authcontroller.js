@@ -493,7 +493,7 @@ const getMeController = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
-    console.log(req.file.path);
+   
     
     let updateUser = await userModel.findByIdAndUpdate(
       req.user.id,
