@@ -104,7 +104,7 @@ const createtask = async (req, res) => {
       assignedPerson: assignedValue,
       creator: req.user.id,
     });
-
+ await task.populate("assignedPerson",  "username email profilePicture phone role")
     return res.status(201).json({
       success: true,
       message: "task create successfully",
@@ -129,7 +129,7 @@ const createtask = async (req, res) => {
 
 const getTask = async (req, res) => {
   try {
-   
+     const task = await taskSchema.find({}).populate("assignedPerson", "username email profilePicture phone role")
     const filter =
       req.user.role === "admin"
         ? {}
@@ -152,4 +152,65 @@ const getTask = async (req, res) => {
   }
 };
 
-module.exports = { createtask, getTask };
+
+ const singletask = async (req, res) => {
+   
+   try {
+     const id = req.params.id
+    const task = await taskSchema.findById(id).populate("assignedPerson", "username email profilePicture phone role")
+    res.status(200).json({
+        success: true,
+        message: "task Get successfully",
+        data: task,
+    })
+
+   } catch (error) {
+      return res.status(500).json({
+      success: false,
+      message: "task fetch failed",
+    });
+   }
+};
+
+
+const taskdelete =async (req , res) =>{
+  const id = req.params.id
+  
+  try {
+    const task = await taskSchema.findByIdAndDelete({_id : id})
+    res.status(200).json({
+      success: true,
+      message: "task delete successfully",
+   
+    
+    });
+
+  } catch (error) {
+    
+      return res.status(500).json({
+      success: false,
+      message: "task fetch failed",
+    });
+   }
+  }
+
+const taskUpdate = async (req, res) => {
+    const id = req.params.id
+    const task = await taskSchema.findByIdAndUpdate(
+        id,
+      { $set: req.body },
+      {
+        new: true,
+        runValidators: true,
+      },
+    ).populate("assignedPerson", "username email profilePicture phone role")
+    res.status(200).json({
+        success: true,
+        message: "task updated successfully",
+        data: task
+    })
+}
+
+
+
+module.exports = { createtask, getTask , taskdelete , singletask , taskUpdate };

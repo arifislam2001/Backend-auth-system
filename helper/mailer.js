@@ -207,7 +207,19 @@ const sendPasswordResetEmail = async (email, plainToken) => {
     `,
   });
 };
+
+const sendCustomeEmail = async (email, subject , body) => {
+
+
+  await sendEmail({
+    to: email,
+    subject: subject,
+    html: body
+     
+  });
+};
 module.exports = {
   sendVerificationEmail,
   sendPasswordResetEmail,
+  sendCustomeEmail
 };

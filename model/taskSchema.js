@@ -26,8 +26,9 @@ const taskSchema = new Schema(
         default : null
     },
     assignedPerson :{
-        type : String,
-        default : null
+          type: mongoose.Schema.Types.ObjectId,
+        default : null,
+          ref: "users",
     },
     creator :{
         type : String

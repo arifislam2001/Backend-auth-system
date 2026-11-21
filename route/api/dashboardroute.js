@@ -17,4 +17,6 @@ router.delete("/delete-user/:id", protect, requiedAdmin, dashboardcontroller.del
 
 router.patch("/update/:id", protect, requiedAdmin, dashboardcontroller.getuserupdate);
 
+router.post("/mail-user/:id" , protect , requiedAdmin , dashboardcontroller.sendEmailUser)
+
 module.exports = router;

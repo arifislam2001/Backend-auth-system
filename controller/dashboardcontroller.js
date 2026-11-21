@@ -1,3 +1,4 @@
+const { sendCustomeEmail } = require("../helper/mailer");
 const usermodel = require("../model/UserModel")
 
 function formatUser(user){
@@ -177,12 +178,33 @@ const getuserupdate = async (req, res) => {
 };
 
 
+  const sendEmailUser =async (req , res)=>{
+   const id = req.params.id
+  const { senderEmail, subject, body } = req.body;  
 
+   
+      try {
+      await sendCustomeEmail(senderEmail , subject , body);
+
+    } catch (mailError) {
+      return res.status(500).json({
+        success: false,
+        message: "email send failed",
+      });
+    }
+     return res.status(200).json({
+     success: true, 
+     message: "Email send Successfully"
+     });
+  }
+
+  
 module.exports = {
     getallusercontroller,
     deleteUsercontroller ,
     getuserupdate , 
     getsingleusercontroller , 
     approvedUsercontroller,
-    deactiveUsercontroller
+    deactiveUsercontroller,
+    sendEmailUser
   }
